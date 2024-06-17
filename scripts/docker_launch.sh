@@ -61,7 +61,7 @@ gnome-terminal --tab --title="NOS UDP Terminal"  -- $DFLAGS -v $SIM_DIR:$SIM_DIR
 echo ""
 
 # Note only currently working with a single spacecraft
-export SATNUM=2
+export SATNUM=1
 
 #
 # Spacecraft Loop
@@ -77,18 +77,18 @@ do
     #echo "Spacecraft number        = " $SC_NUM
     #echo "Spacecraft network       = " $SC_NETNAME
     #echo "Spacecraft configuration = " $SC_CFG_FILE
-
-    echo "Launch GSW..."
-    $BASE_DIR/cfg/build/gsw_launch.sh
-    echo ""
     
     echo $SC_NUM " - Create spacecraft network..."
     $DNETWORK create $SC_NETNAME 2> /dev/null
     echo ""
 
-    echo $SC_NUM " - Connect COSMOS to spacecraft network..."
-    $DNETWORK connect $SC_NETNAME $SC_NUM"_cosmos_openc3-operator_1" --alias $SC_COSMOSNAME
+    echo "Launch GSW..."
+    $BASE_DIR/cfg/build/gsw_launch.sh
     echo ""
+
+    # echo $SC_NUM " - Connect COSMOS to spacecraft network..."
+    # $DNETWORK connect $SC_NETNAME $SC_NUM"_cosmos_openc3-operator_1" --alias $SC_COSMOSNAME
+    # echo ""
 
     echo $SC_NUM " - 42..."
     rm -rf $USER_NOS3_DIR/42/NOS3InOut
