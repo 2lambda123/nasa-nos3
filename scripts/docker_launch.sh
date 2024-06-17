@@ -50,9 +50,9 @@ $DNETWORK create \
     nos3_core
 echo ""
 
-#echo "Launch GSW..."
-$BASE_DIR/cfg/build/gsw_launch.sh
-echo ""
+# #echo "Launch GSW..."
+# $BASE_DIR/cfg/build/gsw_launch.sh
+# echo ""
 
 echo "Create NOS interfaces..."
 export GND_CFG_FILE="-f nos3-simulator.xml"
@@ -61,7 +61,7 @@ gnome-terminal --tab --title="NOS UDP Terminal"  -- $DFLAGS -v $SIM_DIR:$SIM_DIR
 echo ""
 
 # Note only currently working with a single spacecraft
-export SATNUM=1
+export SATNUM=2
 
 #
 # Spacecraft Loop
@@ -70,19 +70,24 @@ for (( i=1; i<=$SATNUM; i++ ))
 do
     export SC_NUM="sc_"$i
     export SC_NETNAME="nos3_"$SC_NUM
+    export SC_COSMOSNAME="cosmos_"$SC_NUM
     export SC_CFG_FILE="-f nos3-simulator.xml" #"-f sc_"$i"_nos3_simulator.xml"
 
     # Debugging
     #echo "Spacecraft number        = " $SC_NUM
     #echo "Spacecraft network       = " $SC_NETNAME
     #echo "Spacecraft configuration = " $SC_CFG_FILE
+
+    echo "Launch GSW..."
+    $BASE_DIR/cfg/build/gsw_launch.sh
+    echo ""
     
     echo $SC_NUM " - Create spacecraft network..."
     $DNETWORK create $SC_NETNAME 2> /dev/null
     echo ""
 
     echo $SC_NUM " - Connect COSMOS to spacecraft network..."
-    $DNETWORK connect $SC_NETNAME cosmos_openc3-operator_1 --alias cosmos
+    $DNETWORK connect $SC_NETNAME $SC_NUM"_cosmos_openc3-operator_1" --alias $SC_COSMOSNAME
     echo ""
 
     echo $SC_NUM " - 42..."
